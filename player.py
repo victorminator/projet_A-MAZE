@@ -1,4 +1,5 @@
 from random import choice
+import time
 import pygame
 import pygame.key
 import pygame.event
@@ -33,6 +34,8 @@ class PlayerConstructor(StaticSprite):
         self.recursion_movement = False
         self.recursion_index = 0
         self.has_moved = False
+        self.is_alive = True
+        self.initialised_timer = 0
         self.splosh_sounds = folder_import("sounds/impsplats", object_type="sound")
     
     def reverse_speed(self):
@@ -98,6 +101,8 @@ class PlayerConstructor(StaticSprite):
         self.splats.add(splash_sprite)
         for player_characters in self.groups()[0]:
             player_characters.reset_position()
+            player_characters.is_alive = False
+            player_characters.initialised_timer = time.time()
         choice(self.splosh_sounds).play()
 
     def get_sploshed(self, hazard_group):
