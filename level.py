@@ -1,3 +1,4 @@
+import time
 import pygame
 import pygame.key
 import pygame.event
@@ -91,12 +92,16 @@ class Level:
         return False
 
     def collected_key(self):
+        collected = []
         if len(self.key) > 0:
             for sprite_character in self.player_container.sprites():
                 for key_sprt in self.keys:
                     if simple_sprites_collision(sprite_character, key_sprt, kill_2=True):
                         sprite_character.initial_position = self.keys[key_sprt]
+                        collected.append(key_sprt)
                         self.key_sf.play()
+        for col_key in collected:
+            self.keys.pop(col_key)
         return len(self.key) == 0
 
     def lock_config(self):
@@ -117,7 +122,10 @@ class Level:
         self.key.update()
         self.ghosts.draw(self.display_surface)
         self.ghosts.update(self.tiles)
-        self.player_container.draw(self.display_surface)
-        self.player_container.update(self.tiles, self.ghosts)
-
-
+        if self.player_container.sprites()[0].is_alive:
+            self.player_container.draw(self.display_surface)
+            self.player_container.update(self.tiles, self.ghosts)
+        else:
+            current_time = time.time()
+            if current_time - self.player_container.sprites()[0].initialised_timer > 1:
+                self.player_container.sprites()[0].is_alive = True
