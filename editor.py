@@ -172,9 +172,9 @@ stopped_placing = True
 fill_level()
 
 block_type = has_common_elements(level_representation, BLOCKS, 1)
-buildmenu_display[0] = block_type[0]
+buildmenu_display[0] = BLOCKS if not block_type else block_type[0]
 walk_type = has_common_elements(level_representation, ROUTES, 1)
-buildmenu_display[1] = walk_type[0]
+buildmenu_display[1] = YELLOW_ROUTE if not walk_type else walk_type[0]
 foot_config()
 
 while currently_running:
